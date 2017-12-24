@@ -31,6 +31,62 @@ Return $this->hasMany(Item::className(), [‘id’=>’item_id’]);
 	}
 }
 ```
+##认证user组件-RBAC授权
+http://www.yiichina.com/doc/guide/2.0/security-authorization#rbac
+RBAC授权 1公共文件中配置 2建立RBAC需要的表-5张基本表 3创建角色 4判定权限
+```php
+ //1. 添加角色
+    public function actionRole($name)
+    {
+        //实例化组件对象
+        $auth = \Yii::$app->authManager;
+        //创建一个角色对象
+        $role=$auth->createRole($name);
+        $role->description="角色名".$name;
+        //添加角色入库
+        $auth->add($role);
+    }
+    //2. 添加权限
+    public function actionPer($name){
+        //实例化组件对象
+        $auth = \Yii::$app->authManager;
+        //创建一个权限对象
+        $per=$auth->createPermission($name);
+
+        //添加权限入库
+        $auth->add($per);
+    }
+    //3. 给角色添加权限   权限的名称通常是路由 goods/index
+    public function actionRolePer($roleName,$perName){
+        //实例化组件对象
+        $auth = \Yii::$app->authManager;
+        //3.1 找到角色
+        $role=$auth->getRole($roleName);
+        //3.2 找到权限
+        $per=$auth->getPermission($perName);
+        //3.3. 关联角色和权限
+        $auth->addChild($role,$per);
+    }
+    //4. 把用户分配到角色
+    public function actionAdminRole($id,$roleName){
+        //实例化组件对象
+        $auth = \Yii::$app->authManager;
+        //4.1 找到用户Id
+        //4.2 找到角色对象
+        $role=$auth->getRole($roleName);
+        //4.3 把用户放到角色中
+        $auth->assign($role,$id);
+    }
+    //判断当前用户有没有权限
+    public function actionHasPer($name){
+        //实例化组件对象
+      //  $auth = \Yii::$app->authManager;
+        //判断用户有没有权限
+
+        var_dump(\Yii::$app->user->can($name));
+    }
+```
+
 ##添加显示关联数据表的下拉菜单
 ```php
 //得到所有分类的数组数据
