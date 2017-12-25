@@ -99,7 +99,7 @@ class BrandController extends \yii\web\Controller
 
     }
 
-
+    //隐藏
     public function actionCallback($id)
     {
         $model=Brand::findOne($id);
@@ -108,7 +108,21 @@ class BrandController extends \yii\web\Controller
             return $this->redirect(["index"]);
         }
     }
-
+    //显示回收站
+    public function actionShow()
+    {
+        $brands=Brand::find()->where(["reclaim"=>2])->all();
+        return $this->render("show", ['brands' => $brands]);
+    }
+    //回显
+    public function actionDisplay($id)
+    {
+        $brand=Brand::findOne($id);
+        $brand->reclaim=1;
+        if ($brand->save()) {
+            return $this->redirect(["index"]);
+        }
+    }
 
 
 }

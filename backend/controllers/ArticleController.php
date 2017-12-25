@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Article;
 use backend\models\ArticleCategory;
 use backend\models\ArticleDetail;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Request;
 
@@ -12,8 +13,16 @@ class ArticleController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $models=Article::find()->where(["reclaim"=>1])->all();
-        return $this->render('index',compact("models"));
+        $query=Article::find()->where(["reclaim"=>1]);
+        //获取总的条数
+        $count=$query->count();
+        //得到分页对象
+        $pag=new Pagination([
+           'totalCount' => $count,
+           'pageSize' => 2
+        ]);
+        $models=$query->offset($pag->offset)->limit($pag->limit)->all();
+        return $this->render('index',compact("models",'pag'));
     }
 
     //添加方法
@@ -91,6 +100,7 @@ class ArticleController extends \yii\web\Controller
         }
     }
 
+    //隐藏
     public function actionCallback($id)
     {
         $model=Article::findOne($id);
@@ -111,5 +121,21 @@ class ArticleController extends \yii\web\Controller
     ];
 
 }
+
+    //显示回收站
+    public function actionShow()
+    {
+        $brands=Article::find()->where(["reclaim"=>2])->all();
+        return $this->render("show", ['brands' => $brands]);
+    }
+    //回显
+    public function actionDisplay($id)
+    {
+        $brand=Article::findOne($id);
+        $brand->reclaim=1;
+        if ($brand->save()) {
+            return $this->redirect(["index"]);
+        }
+    }
 
 }

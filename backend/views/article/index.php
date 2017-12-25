@@ -1,4 +1,5 @@
 <a class="btn btn-success" href="<?=\yii\helpers\Url::to(['add'])?>">添加</a>
+<a class="btn btn-success" href="<?=\yii\helpers\Url::to(['show'])?>">回收站</a>
 <table class="table table-bordered">
     <tr>
         <td>id</td>
@@ -23,12 +24,14 @@
             <td><?=$model['inputtime']?></td>
             <td>
                 <a class="btn btn-info" href="<?=\yii\helpers\Url::to(['edit','id'=>$model->id])?>" role="button">编辑</a>
-                <a class="btn btn-success" href="<?=\yii\helpers\Url::to(['callback','id'=>$model->id])?>" role="button">回收站</a>
+                <a class="btn btn-success" href="<?=\yii\helpers\Url::to(['callback','id'=>$model->id])?>" role="button">隐藏</a>
                 <a class="btn btn-danger" href="<?=\yii\helpers\Url::to(['del','id'=>$model->id])?>" role="button">删除</a>
             </td>
         </tr>
     <?php endforeach; ?>
 </table>
+
+<?=\yii\widgets\LinkPager::widget(['pagination' => $pag])?>
 
 
 
