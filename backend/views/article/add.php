@@ -14,8 +14,9 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'name') ?>
         <?= $form->field($model, 'sort')->textInput(["value"=>20]) ?>
         <?= $form->field($model, 'status')->radioList([1=>"上架",2=>"下架"],["value"=>1]) ?>
-        <?= $form->field($model,'article_category_id')?>
-        <?= $form->field($detail,'content')->textarea(["rows"=>10])?>
+        <?= $form->field($model,'article_category_id')->dropDownList($classArray)?>
+        <?= $form->field($detail,'content')->widget('kucha\ueditor\UEditor',[])?>
+
         <?= $form->field($model, 'intro') ?>
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>

@@ -46,7 +46,7 @@ class Article extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => '名称',
-            'article_category_id' => '分类编号',
+            'article_category_id' => '文章分类',
             'intro' => '简介',
             'status' => '状态',
             'sort' => '排序',
@@ -56,9 +56,15 @@ class Article extends \yii\db\ActiveRecord
     }
 
 
-    //关联文章分类表查询 -关联查询技术
+    //关联文章内容表查询 -关联查询技术
     public function getDetail()
     {
         return $this->hasOne(ArticleDetail::className(),['article_id'=>'id']);
+    }
+
+    //关联文章分类表查询 1-1
+    public function getCategory()
+    {
+        return $this->hasOne(ArticleCategory::className(),['id'=>'article_category_id']);
     }
 }

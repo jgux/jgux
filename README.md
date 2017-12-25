@@ -201,4 +201,47 @@ controller中
 2 文章表自身状态栏做列表 
 使用2个model技术
 ```
+#yii2-富文本框[git搜索 - yii2 qiniu]
+https://github.com/search?utf8=%E2%9C%93&q=yii2+uedit&type=
+controller中
+public function actions()
+{
+    return [
+        'upload' => [
+            'class' => 'kucha\ueditor\UEditorAction', //图片处理
+        ]
+    ];
+}
+view中
+echo $form->field($model,'colum')->widget('kucha\ueditor\UEditor',[]);
+	
+#yii2-七牛云{CDN技术}[git搜索 - yii2 uedit]
+https://github.com/flyok666/yii2-qiniu
+controller中
+
+$config = [
+
+            'accessKey' => 'EAd29Qrh05q78_cZhajAWcbB1wYCBLyHLqkanjOG',//AK
+            'secretKey' => '_R5o3ZZpPJvz8bNGBWO9YWSaNbxIhpsedbiUtHjW',//SK
+            'domain' => 'http://p1ht4b07w.bkt.clouddn.com',//临时域名
+            'bucket' => 'php0830',//空间名称
+            'area' => Qiniu::AREA_HUADONG//区域
+        ];
+$qiniu = new Qiniu($config);//实例化对象
+//var_dump($qiniu);exit;
+        $key = time();//上传后的文件名  多文件上传有坑
+        
+        $qiniu->uploadFile($_FILES['file']["tmp_name"], $key);//调用上传方法上传文件
+        $url = $qiniu->getLink($key);//得到上传后的地址
+        
+//返回的结果
+        $result = [
+            'code' => 0,
+            'url' => $url,
+            'attachment' => $url
+
+        ];
+        return json_encode($result);
+        
+
 

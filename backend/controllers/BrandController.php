@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Brand;
+use flyok666\qiniu\Qiniu;
 use yii\web\Request;
 use yii\web\UploadedFile;
 
@@ -67,21 +68,35 @@ class BrandController extends \yii\web\Controller
             2-拼装路径
             3-移动图片
          */
-        $file=UploadedFile::getInstanceByName("file");
+        $config = [
+            'accessKey' => 'EAd29Qrh05q78_cZhajAWcbB1wYCBLyHLqkanjOG',//AK
+            'secretKey' => '_R5o3ZZpPJvz8bNGBWO9YWSaNbxIhpsedbiUtHjW',//SK
+            'domain' => 'http://p1ht4b07w.bkt.clouddn.com',//临时域名
+            'bucket' => 'php0830',//空间名称
+            'area' => Qiniu::AREA_HUADONG//区域
+        ];
+        $qiniu = new Qiniu($config);//实例化对象
+        $key=uniqid();
+        $qiniu->uploadFile($_FILES['file']["tmp_name"], $key);//调用上传方法上传文件
+        /*$file=UploadedFile::getInstanceByName("file");
         if($file){
             $path="images/brand/".uniqid().".".$file->extension;
             //移动图片
-            if($file->saveAs($path,false)){
+            if($file->saveAs($path,false)){*/
+             $qiniu = new Qiniu($config);//实例化对象
+        $key=uniqid();
+        $qiniu->uploadFile($_FILES['file']["tmp_name"], $key);//调用上传方法上传文件
+        $url = $qiniu->getLink($key);//得到上传后的地址
                 $result=[
-                  'code'=>0,
-                   'url'=>'/'.$path,
-                   'attachment'=>$path
+                    'code'=>0,
+                    'url'=>$url,
+                    'attachment'=>$url
                 ];
                 return json_encode($result);
-            }
+
 //            var_dump($path);exit();
 
-        }
+
     }
 
 

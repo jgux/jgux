@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Article;
+use backend\models\ArticleCategory;
 use backend\models\ArticleDetail;
 use yii\helpers\ArrayHelper;
 use yii\web\Request;
@@ -19,9 +20,11 @@ class ArticleController extends \yii\web\Controller
     public function actionAdd()
     {
         $model=new Article();
-        //得到关联数据
         $detail=new ArticleDetail();
-        //把数组转化键值对
+        //得到所有的分类
+        $class=ArticleCategory::find()->asArray()->all();
+        //转化为键值对
+        $classArray=ArrayHelper::map($class,'id','name');
         $request=\Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
@@ -43,16 +46,18 @@ class ArticleController extends \yii\web\Controller
             }
         }
 
-        return $this->render("add", compact("model","detail"));
+        return $this->render("add", compact("model","detail",'classArray'));
     }
 
     //编辑方法
     public function actionEdit($id)
     {
         $model=Article::findOne($id);
-        //得到关联数据
-        $detail=ArticleDetail::find()->where(["article_id"=>$id])->one();
-        //把数组转化键值对
+        $detail=ArticleDetail::findOne($id);
+        //得到所有的分类
+        $class=ArticleCategory::find()->asArray()->all();
+        //转化为键值对
+        $classArray=ArrayHelper::map($class,'id','name');
         $request=\Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
@@ -74,7 +79,7 @@ class ArticleController extends \yii\web\Controller
             }
         }
 
-        return $this->render("add", compact("model","detail"));
+        return $this->render("add", compact("model","detail",'classArray'));
     }
 
     //删除方法
@@ -95,5 +100,16 @@ class ArticleController extends \yii\web\Controller
             return $this->redirect(["index"]);
         }
     }
+
+    //富文本框
+    public function actions()
+    {
+        return [
+            'upload' => [
+                'class' => 'kucha\ueditor\UEditorAction',
+        ],
+    ];
+
+}
 
 }
