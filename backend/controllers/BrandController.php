@@ -69,11 +69,11 @@ class BrandController extends \yii\web\Controller
             3-移动图片
          */
         $config = [
-            'accessKey' => 'EAd29Qrh05q78_cZhajAWcbB1wYCBLyHLqkanjOG',//AK
-            'secretKey' => '_R5o3ZZpPJvz8bNGBWO9YWSaNbxIhpsedbiUtHjW',//SK
-            'domain' => 'http://p1ht4b07w.bkt.clouddn.com',//临时域名
-            'bucket' => 'php0830',//空间名称
-            'area' => Qiniu::AREA_HUADONG//区域
+            'accessKey' => '8h4Fp5E2aMRn6dX_k47jw5kkz_iT_DZzhxekm-iB',//AK
+            'secretKey' => 'CZl0iHYfj6qoEiN51Cm3FLdFy6xwiIGYvMos2SsA',//SK
+            'domain' => 'http://p1jsqm3m0.bkt.clouddn.com',//临时域名
+            'bucket' => 'yii2jd',//空间名称
+            'area' => Qiniu::AREA_HUANAN//区域
         ];
         $qiniu = new Qiniu($config);//实例化对象
         $key=uniqid();

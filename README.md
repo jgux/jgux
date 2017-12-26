@@ -52,7 +52,6 @@ RBAC授权 1公共文件中配置 2建立RBAC需要的表-5张基本表 3创建�
         $auth = \Yii::$app->authManager;
         //创建一个权限对象
         $per=$auth->createPermission($name);
-
         //添加权限入库
         $auth->add($per);
     }
@@ -86,7 +85,6 @@ RBAC授权 1公共文件中配置 2建立RBAC需要的表-5张基本表 3创建�
         var_dump(\Yii::$app->user->can($name));
     }
 ```
-
 ##添加显示关联数据表的下拉菜单
 ```php
 //得到所有分类的数组数据
@@ -117,7 +115,6 @@ echo $form->field($model,"show")->dropDownList(
             'pageSize' => 4
         ]);
         $models=$query->offset($pag->offset)->limit($pag->limit)->all();
-
         return $this->render("index",compact("models","pag"));
 //view中
 	<?=\yii\widgets\LinkPager::widget(['pagination' => $pag])?>
@@ -146,8 +143,7 @@ echo $form->field($model,"code")->widget(
 ```php
 model中 [['imgFile'],'image','extensions' =>"jpg,gif,png",'skipOnEmpty' => false],];
 controller中 
-//上传图片
-            $model->imgFile=UploadedFile::getInstance($model,"imgFile");
+//上传图片           $model->imgFile=UploadedFile::getInstance($model,"imgFile");
 //拼装图片路径
             $imgPath="images/".uniqid().".".$model->imgFile->extension;
             //保存图片到目录下
@@ -155,7 +151,6 @@ controller中
             $model->img=$imgPath;
 //视图中
 	<?=\yii\bootstrap\Html::img("/".$model->img,["height"=>40])?>
-
 //过滤器
 	namespace-命名空间 过滤继承ActionFilter
 	在方法之前自动执行-beforeAction-后执行-afterAction
@@ -179,7 +174,6 @@ controller中
         ];
     }
 ```
-
 #商品品牌
 ```
 //品牌管理技术难点
@@ -188,7 +182,6 @@ controller中
   https://packagist.org/packages/bailangzhan/yii2-webuploader
   2 软删除技术的第一次使用
 ```
-
 #文章-文章内容
 ```php
 1 和文章表和文章分类表关联查询
@@ -213,12 +206,10 @@ public function actions()
     ];
 }
 view中
-echo $form->field($model,'colum')->widget('kucha\ueditor\UEditor',[]);
-	
+echo $form->field($model,'colum')->widget('kucha\ueditor\UEditor',[]);	
 #yii2-七牛云{CDN技术}[git搜索 - yii2 uedit]
 https://github.com/flyok666/yii2-qiniu
 controller中
-
 $config = [
 
             'accessKey' => 'EAd29Qrh05q78_cZhajAWcbB1wYCBLyHLqkanjOG',//AK
@@ -229,11 +220,9 @@ $config = [
         ];
 $qiniu = new Qiniu($config);//实例化对象
 //var_dump($qiniu);exit;
-        $key = time();//上传后的文件名  多文件上传有坑
-        
+        $key = time();//上传后的文件名  多文件上传有坑      
         $qiniu->uploadFile($_FILES['file']["tmp_name"], $key);//调用上传方法上传文件
-        $url = $qiniu->getLink($key);//得到上传后的地址
-        
+        $url = $qiniu->getLink($key);//得到上传后的地址       
 //返回的结果
         $result = [
             'code' => 0,
@@ -241,7 +230,21 @@ $qiniu = new Qiniu($config);//实例化对象
             'attachment' => $url
 
         ];
-        return json_encode($result);
-        
-
-
+        return json_encode($result);        
+#分类-左值|右值
+github-搜索 yii2-nested
+https://github.com/creocoder/yii2-nested-sets
+注意事项：多树的时候记得一定要开始 'treeAttribute' => 'tree',
+#ztree-树插件
+github-搜索 yii2-ztree
+https://github.com/liyuze/yii2-ztree
+开启所有的分类展示 view中
+<?php
+    $js=<<<EOF
+    //console.dir(111);
+    var treeObj = $.fn.zTree.getZTreeObj("w1");
+    treeObj.expandAll(true);
+    
+EOF;
+    $this->registerJs($js);
+?>

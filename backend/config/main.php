@@ -9,6 +9,7 @@ $params = array_merge(
 return [
     'charset'=>'utf-8',
     'timeZone'=>'PRC',
+    
     'language' => 'zh-CN',
     'defaultRoute'=>'brand/index',
     'id' => 'app-backend',
