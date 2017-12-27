@@ -1,3 +1,85 @@
+#商品品牌
+```
+//品牌管理技术难点
+  1 使用webUploader替换yii2原始的图片上传功能
+  原拷贝文件参考：
+  https://packagist.org/packages/bailangzhan/yii2-webuploader
+  2 软删除技术的第一次使用
+```
+#文章-文章内容
+```php
+1 和文章表和文章分类表关联查询
+//关联文章分类表查询 -关联查询技术 就近原则
+    public function getDetail()
+    {
+        return $this->hasOne(ArticleDetail::className(),['article_id'=>'id']);
+    }
+}
+2 文章表自身状态栏做列表 
+使用2个model技术
+```
+
+#yii2-富文本框[git搜索 - yii2 qiniu]
+
+https://github.com/search?utf8=%E2%9C%93&q=yii2+uedit&type=
+controller中
+public function actions()
+{
+    return [
+        'upload' => [
+            'class' => 'kucha\ueditor\UEditorAction', //图片处理
+        ]
+    ];
+}
+view中
+echo $form->field($model,'colum')->widget('kucha\ueditor\UEditor',[]);
+	
+#yii2-七牛云{CDN技术}[git搜索 - yii2 uedit]
+
+https://github.com/flyok666/yii2-qiniu
+controller中
+$config = [
+
+            'accessKey' => 'EAd29Qrh05q78_cZhajAWcbB1wYCBLyHLqkanjOG',//AK
+            'secretKey' => '_R5o3ZZpPJvz8bNGBWO9YWSaNbxIhpsedbiUtHjW',//SK
+            'domain' => 'http://p1ht4b07w.bkt.clouddn.com',//临时域名
+            'bucket' => 'php0830',//空间名称
+            'area' => Qiniu::AREA_HUADONG//区域
+        ];
+$qiniu = new Qiniu($config);//实例化对象
+//var_dump($qiniu);exit;
+        $key = time();//上传后的文件名  多文件上传有坑      
+        $qiniu->uploadFile($_FILES['file']["tmp_name"], $key);//调用上传方法上传文件
+        $url = $qiniu->getLink($key);//得到上传后的地址       
+//返回的结果
+        $result = [
+            'code' => 0,
+            'url' => $url,
+            'attachment' => $url
+
+        ];
+        return json_encode($result);               
+#分类-左值|右值
+
+github-搜索 yii2-nested
+https://github.com/creocoder/yii2-nested-sets
+注意事项：多树的时候记得一定要开始 'treeAttribute' => 'tree',
+添加子类的时候 1->找到父类 2->新建一个子类 3->追加到父类
+
+#ztree-树插件
+github-搜索 yii2-ztree
+https://github.com/liyuze/yii2-ztree
+开启所有的分类展示 view中
+<?php
+    $js=<<<EOF
+    //console.dir(111);
+    var treeObj = $.fn.zTree.getZTreeObj("w1");
+    treeObj.expandAll(true);
+    
+EOF;
+    $this->registerJs($js);
+?>
+
 #yii常用技术整理
 1）controller-表单里面 提交->判定提交方式->绑定->验证
 2）model-1设置属性{public $imgFile|code}-2设置规则-3设置label{别名} 
@@ -174,77 +256,3 @@ controller中
         ];
     }
 ```
-#商品品牌
-```
-//品牌管理技术难点
-  1 使用webUploader替换yii2原始的图片上传功能
-  原拷贝文件参考：
-  https://packagist.org/packages/bailangzhan/yii2-webuploader
-  2 软删除技术的第一次使用
-```
-#文章-文章内容
-```php
-1 和文章表和文章分类表关联查询
-//关联文章分类表查询 -关联查询技术 就近原则
-    public function getDetail()
-    {
-        return $this->hasOne(ArticleDetail::className(),['article_id'=>'id']);
-    }
-}
-2 文章表自身状态栏做列表 
-使用2个model技术
-```
-#yii2-富文本框[git搜索 - yii2 qiniu]
-https://github.com/search?utf8=%E2%9C%93&q=yii2+uedit&type=
-controller中
-public function actions()
-{
-    return [
-        'upload' => [
-            'class' => 'kucha\ueditor\UEditorAction', //图片处理
-        ]
-    ];
-}
-view中
-echo $form->field($model,'colum')->widget('kucha\ueditor\UEditor',[]);	
-#yii2-七牛云{CDN技术}[git搜索 - yii2 uedit]
-https://github.com/flyok666/yii2-qiniu
-controller中
-$config = [
-
-            'accessKey' => 'EAd29Qrh05q78_cZhajAWcbB1wYCBLyHLqkanjOG',//AK
-            'secretKey' => '_R5o3ZZpPJvz8bNGBWO9YWSaNbxIhpsedbiUtHjW',//SK
-            'domain' => 'http://p1ht4b07w.bkt.clouddn.com',//临时域名
-            'bucket' => 'php0830',//空间名称
-            'area' => Qiniu::AREA_HUADONG//区域
-        ];
-$qiniu = new Qiniu($config);//实例化对象
-//var_dump($qiniu);exit;
-        $key = time();//上传后的文件名  多文件上传有坑      
-        $qiniu->uploadFile($_FILES['file']["tmp_name"], $key);//调用上传方法上传文件
-        $url = $qiniu->getLink($key);//得到上传后的地址       
-//返回的结果
-        $result = [
-            'code' => 0,
-            'url' => $url,
-            'attachment' => $url
-
-        ];
-        return json_encode($result);        
-#分类-左值|右值
-github-搜索 yii2-nested
-https://github.com/creocoder/yii2-nested-sets
-注意事项：多树的时候记得一定要开始 'treeAttribute' => 'tree',
-#ztree-树插件
-github-搜索 yii2-ztree
-https://github.com/liyuze/yii2-ztree
-开启所有的分类展示 view中
-<?php
-    $js=<<<EOF
-    //console.dir(111);
-    var treeObj = $.fn.zTree.getZTreeObj("w1");
-    treeObj.expandAll(true);
-    
-EOF;
-    $this->registerJs($js);
-?>

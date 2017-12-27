@@ -10,7 +10,7 @@ class CategoryController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $models=Category::find()->all();
+        $models=Category::find()->orderBy('tree,lft')->all();
         return $this->render('index',compact('models'));
     }
 

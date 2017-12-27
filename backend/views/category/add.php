@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\models\Category */
 /* @var $form ActiveForm */
 ?>
+<a class="btn btn-success" href="<?=\yii\helpers\Url::to(['index'])?>">回到列表页</a>
 <div class="category-add">
 
     <?php $form = ActiveForm::begin(); ?>

@@ -11,7 +11,7 @@ class BrandController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $brands=Brand::find()->where(["reclaim"=>1])->all();
+        $brands=Brand::find()->where(['reclaim'=>1])->all();
         return $this->render('index',["brands"=>$brands]);
     }
 
