@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Category;
+use yii\db\Exception;
 use yii\helpers\Json;
 use yii\web\Request;
 
@@ -68,22 +69,31 @@ class CategoryController extends \yii\web\Controller
             $model->load($request->post());
             //验证
             if ($model->validate()){
-                //一级分类
-                if ($model->parent_id==0){
-                    $model->makeRoot();
-                    \Yii::$app->session->setFlash('info','修改一级分类成功');
-                }else{
-                    //子节点
-                    //1 找到父对象
-                    $parent=Category::findOne($model->parent_id);
-                    //var_dump($parent);exit;
-                    //2 创建子节点
-                    //3 追加到父节点
-                    $model->prependTo($parent);
-                    \Yii::$app->session->setFlash('info',"把".$model->name."修改到".$parent->name."下成功");
+                //捕获异常
+                try{
+                    //一级分类
+                    if ($model->parent_id==0){
+                        $model->save();
+                        \Yii::$app->session->setFlash('info','修改一级分类成功');
+                    }else{
+                        //子节点
+                        //1 找到父对象
+                        $parent=Category::findOne($model->parent_id);
+                        //var_dump($parent);exit;
+                        //2 创建子节点
+                        //3 追加到父节点
+                        $model->prependTo($parent);
+                        \Yii::$app->session->setFlash('info',"把".$model->name."修改到".$parent->name."下成功");
+
+                    }
+
+                }catch (Exception $exception){//发生错误执行这里
+                    \Yii::$app->session->setFlash('danger',$exception->getMessage());
+                    return $this->refresh();
                 }
+
                 //刷新页面
-                return $this->redirect(['index']);
+                //return $this->redirect(['index']);
             }else{
                 //TODO
                 var_dump($model->errors);

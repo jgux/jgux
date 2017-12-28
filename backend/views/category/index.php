@@ -58,7 +58,7 @@
 
 <?php
 /* @var $this yii\web\View */
-    $js=<<<EOF
+    $js=<<<js
     $(".cate").click(function(){
         //换图片
        $(this).toggleClass("glyphicon-minus-sign");
@@ -76,15 +76,25 @@
             var lftPer=$(v).attr('lft');
             var rgtPer=$(v).attr('rgt');
             var treePer=$(v).attr('tree');            
-         if(lftPer - lft>0 && rgtPer - rgt<0 && tree==treePer){ 
-            $(v).toggle();
+         if(lftPer - lft>0 && rgtPer - rgt<0 && tree==treePer){
+            //这里有问题 不能用这种方法 $(v).toggle();
+            //判定父类是不是展开状态
+            if(tr.find('span').hasClass('glyphicon-minus-sign')){
+                $(v).find('span').removeClass('glyphicon-plus-sign');
+                $(v).find('span').addClass('glyphicon-minus-sign');
+                $(v).hide();
+            }else{//闭合状态
+                $(v).find('span').removeClass('glyphicon-minus-sign');
+                $(v).find('span').addClass('glyphicon-plus-sign');
+                $(v).show();
+            }           
           } 
             
         })
         
     });
 
-EOF;
+js;
 $this->registerJs($js);
 ?>
 

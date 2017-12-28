@@ -1,24 +1,48 @@
-#商品品牌
-```
-//品牌管理技术难点
-  1 使用webUploader替换yii2原始的图片上传功能
-  原拷贝文件参考：
-  https://packagist.org/packages/bailangzhan/yii2-webuploader
-  2 软删除技术的第一次使用
-```
-#文章-文章内容
+#1品牌
+##需求
+1.品牌表的CURD
+2.使用逻辑删除
+##流程
+建表-增删改查-回收站
+##设计要点
+logo,sort,status
+##难点及解决方案
+1.逻辑删除只改变status属性,不删除记录
+2.图片上传使用能够webuploader插件
+3.使用composer下载和安装webuploader
+4.图片上传到七牛云oss对象存储
+#2文章-文章内容
+##需求
+1.文章分类,文章表,文章内容表的增删改查
+2.要有文章分类表,文章详情表
+##流程
+1.先设计文章分类表
+2.通过分类表创建文章表
+3.通过文章表建立内容表
+4.所有表的增删改查
+##设计要点
+采用分表技术
+##难点及解决方案
 ```php
 1 和文章表和文章分类表关联查询
 //关联文章分类表查询 -关联查询技术 就近原则
-    public function getDetail()
-    {
-        return $this->hasOne(ArticleDetail::className(),['article_id'=>'id']);
-    }
-}
 2 文章表自身状态栏做列表 
 使用2个model技术
 ```
-
+#3商品分类表
+##需求
+商品分类表的CURD
+##流程
+1.composer下载安装nested 插件
+2.利用左值|右值技术建表,添加数据
+3.composer下载安装ztree插件
+4.页面实现无限极分类展示
+##设计要点
+无限极分类
+##难点及解决方案
+1.利用nested插件 左值|右值来实现无限极分类
+2.多树的时候一定要记得开启'treeAttribute' => 'tree'
+3.利用ztree插件 来展现无限极分类
 #yii2-富文本框[git搜索 - yii2 qiniu]
 
 https://github.com/search?utf8=%E2%9C%93&q=yii2+uedit&type=
