@@ -1,49 +1,49 @@
-#1品牌
-##需求
+# 1品牌
+## 需求
 1.品牌表的CURD  
 2.使用逻辑删除
-##流程
+## 流程
 建表-增删改查-回收站
-##设计要点
+## 设计要点
 logo,sort,status
-##难点及解决方案
+## 难点及解决方案
 1.逻辑删除只改变status属性,不删除记录  
 2.图片上传使用能够webuploader插件    
 3.使用composer下载和安装webuploader 
 4.图片上传到七牛云oss对象存储
-#2文章-文章内容
-##需求
+# 2文章-文章内容
+## 需求
 1.文章分类,文章表,文章内容表的增删改查  
 2.要有文章分类表,文章详情表
-##流程
+## 流程
 1.先设计文章分类表  
 2.通过分类表创建文章表  
 3.通过文章表建立内容表  
 4.所有表的增删改查
-##设计要点
+## 设计要点
 采用分表技术
-##难点及解决方案
+## 难点及解决方案
 ```php
 1 和文章表和文章分类表关联查询
 //关联文章分类表查询 -关联查询技术 就近原则
 2 文章表自身状态栏做列表 
 使用2个model技术
 ```
-#3商品分类表
-##需求
+# 3商品分类表
+## 需求
 商品分类表的CURD
-##流程
+## 流程
 1.composer下载安装nested 插件  
 2.利用左值|右值技术建表,添加数据  
 3.composer下载安装ztree插件  
 4.页面实现无限极分类展示
-##设计要点
+## 设计要点
 无限极分类
-##难点及解决方案
+## 难点及解决方案
 1.利用nested插件 左值|右值来实现无限极分类  
 2.多树的时候一定要记得开启'treeAttribute' => 'tree'  
 3.利用ztree插件 来展现无限极分类
-#yii2-富文本框[git搜索 - yii2 qiniu]
+# yii2-富文本框[git搜索 - yii2 qiniu]
 
 https://github.com/search?utf8=%E2%9C%93&q=yii2+uedit&type=
 controller中
@@ -58,7 +58,7 @@ public function actions()
 view中
 echo $form->field($model,'colum')->widget('kucha\ueditor\UEditor',[]);
 	
-#yii2-七牛云{CDN技术}[git搜索 - yii2 uedit]
+# yii2-七牛云{CDN技术}[git搜索 - yii2 uedit]
 
 https://github.com/flyok666/yii2-qiniu
 controller中
@@ -83,14 +83,14 @@ $qiniu = new Qiniu($config);//实例化对象
 
         ];
         return json_encode($result);               
-#分类-左值|右值
+# 分类-左值|右值
 
 github-搜索 yii2-nested
 https://github.com/creocoder/yii2-nested-sets
 注意事项：多树的时候记得一定要开始 'treeAttribute' => 'tree',
 添加子类的时候 1->找到父类 2->新建一个子类 3->追加到父类
 
-#ztree-树插件
+# ztree-树插件
 github-搜索 yii2-ztree
 https://github.com/liyuze/yii2-ztree
 开启所有的分类展示 view中
@@ -104,7 +104,7 @@ EOF;
     $this->registerJs($js);
 ?>
 
-#yii常用技术整理
+# yii常用技术整理
 1）controller-表单里面 提交->判定提交方式->绑定->验证
 2）model-1设置属性{public $imgFile|code}-2设置规则-3设置label{别名} 
 3）二级栏目 地址美化 原生sql 查询生成器 关联查询
@@ -115,21 +115,21 @@ EOF;
 //'defaultRoute' =>'',
 //'layout'=>'',
 //public $layout =false;
-##URL 地址完美化
+## URL 地址完美化
 ```php
 <?=\yii\helpers\Url::to(['goods/add'])?>
 ```
-##原生sql语句对数据库操作
+## 原生sql语句对数据库操作
 ```php
     $query=Yii::$app->db->createCommand(“SELECT * FROM user”);
     queryAll()  queryOne()   Execute()	
     $userLists = $query->queryAll();
 ```
-##查询生成器 $query = Query();
+## 查询生成器 $query = Query();
 ```php
     $userList=$query->select("*")->from('user')->where(['id'=>1])->one()|all()|join()|distinct()去重|limit()|max()|min()
 ```
-##关联查询
+## 关联查询
 ```php
 class Order extends ActiveRecord{
 Public funcction getItems(){
@@ -137,7 +137,7 @@ Return $this->hasMany(Item::className(), [‘id’=>’item_id’]);
 	}
 }
 ```
-##认证user组件-RBAC授权
+## 认证user组件-RBAC授权
 http://www.yiichina.com/doc/guide/2.0/security-authorization#rbac
 RBAC授权 1公共文件中配置 2建立RBAC需要的表-5张基本表 3创建角色 4判定权限
 ```php
@@ -191,7 +191,7 @@ RBAC授权 1公共文件中配置 2建立RBAC需要的表-5张基本表 3创建�
         var_dump(\Yii::$app->user->can($name));
     }
 ```
-##添加显示关联数据表的下拉菜单
+## 添加显示关联数据表的下拉菜单
 ```php
 //得到所有分类的数组数据
         $cates = Category::find()->asArray()->all();
@@ -202,14 +202,14 @@ RBAC授权 1公共文件中配置 2建立RBAC需要的表-5张基本表 3创建�
 index页面
 <td><?=\backend\models\Article::findOne($model['id'])->detail{方法名}->content?></td>
 ```
-##自身实现下拉菜单
+## 自身实现下拉菜单
 ```php
 echo $form->field($model,"show")->dropDownList(
     \frontend\models\Book::find()->select(['show','id'])->indexBy('show')->column(),
     ['prompt'=>'请选择商品状态']
 );
 ```
-##分页的实现
+## 分页的实现
 ```php
 //controller中
         $query=Book::find()->orderBy("id");
@@ -225,7 +225,7 @@ echo $form->field($model,"show")->dropDownList(
 //view中
 	<?=\yii\widgets\LinkPager::widget(['pagination' => $pag])?>
 ```
-##验证码
+## 验证码
 ```php
 //验证码：在 config-man.php-action方法里面
 controller中声明一个action方法  中model中需要添加一个code属性来临时存放验证码
@@ -245,7 +245,7 @@ echo $form->field($model,"code")->widget(
     ]
 );
 ```
-##实现图片的上传
+## 实现图片的上传
 ```php
 model中 [['imgFile'],'image','extensions' =>"jpg,gif,png",'skipOnEmpty' => false],];
 controller中 
@@ -263,7 +263,7 @@ controller中
 	return parent::berfor|after 一定不能少
 	获取当前的路由{$action->uniqueId}v  
 ```
-##自动设置创建时间和修改时间
+## 自动设置创建时间和修改时间
 ```php
     public function behaviors()
     {
