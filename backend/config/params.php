@@ -5,10 +5,10 @@ return [
         '2'=>"no",
 ],
     //webUploader 图片组件
-        'domain' =>  '@web/',
+        'domain' =>  'http://admin.yiijd.com',
         'webuploader' => [
             // 后端处理图片的地址，value 是相对的地址
-            'uploadUrl' => 'upload',
+            'uploadUrl' => 'img-upload',
             // 多文件分隔符
             'delimiter' => ',',
             // 基本配置

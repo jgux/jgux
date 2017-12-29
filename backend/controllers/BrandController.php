@@ -61,7 +61,7 @@ class BrandController extends \yii\web\Controller
     
     
     //webUploader
-    public function actionUpload()
+    public function actionImgUpload()
     {
         /**
          * 1-和原来一样 先得到图片对象
