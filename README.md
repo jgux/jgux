@@ -42,7 +42,8 @@ logo,sort,status
 ## 难点及解决方案
 1.利用nested插件 左值|右值来实现无限极分类  
 2.多树的时候一定要记得开启'treeAttribute' => 'tree'  
-3.利用ztree插件 来展现无限极分类
+3.利用ztree插件 来展现无限极分类  
+4.多图的上传和搜索功能的实现
 # yii2-富文本框[git搜索 - yii2 qiniu]
 
 https://github.com/search?utf8=%E2%9C%93&q=yii2+uedit&type=

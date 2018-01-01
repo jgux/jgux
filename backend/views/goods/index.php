@@ -1,8 +1,37 @@
 <?php
 /* @var $this yii\web\View */
+use yii\widgets\LinkPager;
 ?>
-<a class="btn btn-info" href="<?=\yii\helpers\Url::to(['add'])?>">添加</a>
-<a class="btn btn-danger" href="<?=\yii\helpers\Url::to([' reclaim'])?>">回收站</a>
+<div class="row">
+    <div class="pull-left">
+        <a class="btn btn-info" href="<?=\yii\helpers\Url::to(['add'])?>">添加</a>
+    </div>
+    <div class="pull-right">
+        <!--<select>
+            <option>请选择</option>
+            <option>上架</option>
+            <option>下架</option>
+        </select>-->
+        <form class="form-inline">
+            <select class="form-control" name="status">
+                <option>选择状态</option>
+                <option value="1" <?= Yii::$app->request->get("status")==='1'?"selected":'' ?>>上架</option>
+                <option value="0" <?= Yii::$app->request->get("status")==='0'?"selected":'' ?>>下架</option>
+            </select>
+            <div class="form-group">
+                <input type="text" class="form-control" size="4" name="minPrice"  placeholder="最低价" value="<?php Yii::$app->request->get('minPrice') ?>">
+            </div>
+            -
+            <div class="form-group">
+                <input type="text" class="form-control" size="4" name="maxPrice"  placeholder="最高价" value="<?php Yii::$app->request->get('maxPrice') ?>">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="keyWord"   placeholder="请输入名称|货号" value="<?php Yii::$app->request->get('keyWord') ?>">
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+        </form>
+    </div>
+</div>
 <table class="table">
     <tr>
         <td>id</td>
@@ -14,6 +43,7 @@
         <td>市场价格</td>
         <td>本店价格</td>
         <td>库存</td>
+        <td>状态</td>
         <td>排序</td>
         <td>录入时间</td>
         <td>操作</td>
@@ -30,15 +60,18 @@
             <td><?=$model->market_price?></td>
             <td><?=$model->shop_price?></td>
             <td><?=$model->stock?></td>
+            <td><?=$model->status?></td>
             <td><?=$model->sort?></td>
             <td><?=$model->inputtime?></td>
             <td>
                 <a class="btn btn-info" href="<?=\yii\helpers\Url::to(['edit','id'=>$model->id])?>" role="button">编辑</a>
-                <a class="btn btn-default" href="<?=\yii\helpers\Url::to(['goods-gallery/add','id'=>$model->id])?>" role="button">多图</a>
+                <a class="btn btn-default" href="<?=\yii\helpers\Url::to(['goods-gallery/index','id'=>$model->id])?>" role="button">多图</a>
                 <a class="btn btn-warning" href="<?=\yii\helpers\Url::to(['content','id'=>$model->id])?>" role="button">内容</a>
-                <a class="btn btn-success" href="<?=\yii\helpers\Url::to(['callback','id'=>$model->id])?>" role="button">隐藏</a>
                 <a class="btn btn-danger" href="<?=\yii\helpers\Url::to(['del','id'=>$model->id])?>" role="button">删除</a>
             </td>
         </tr>
     <?php endforeach; ?>
 </table>
+<?=LinkPager::widget([
+    'pagination' => $pages,
+]);?>

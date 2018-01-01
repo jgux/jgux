@@ -43,6 +43,21 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'logo')->widget('manks\FileInput', [
         ]);
         ?>
+    <?php
+    // ActiveForm
+    echo $form->field($model, 'imgFile')->widget('manks\FileInput', [
+        'clientOptions' => [
+            'pick' => [
+                'multiple' => true,
+            ],
+            // 'server' => Url::to('upload/u2'),
+            // 'accept' => [
+            // 	'extensions' => 'png',
+            // ],
+        ],
+    ]); ?>
+
+
         <?=$form->field($goodsIntro,'content')->widget('kucha\ueditor\UEditor',[]);?>
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>

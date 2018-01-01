@@ -7,6 +7,7 @@ use backend\models\Category;
 use backend\models\Goods;
 use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Request;
@@ -17,8 +18,33 @@ class GoodsController extends \yii\web\Controller
     //首页
     public function actionIndex()
     {
-        $models=Goods::find()->all();
-        return $this->render('index',compact("models"));
+        //分页
+        $query=Goods::find();
+        //添加搜索添加
+        $request=\Yii::$app->request;
+        $minPrice=$request->get('minPrice');
+        $maxPrice=$request->get('maxPrice');
+        $keyWord=$request->get('keyWord');
+        $status=$request->get('status');
+        if ($minPrice){
+            $query->andWhere("shop_price>={$minPrice}");
+        }
+        if($maxPrice){
+            $query->andWhere("shop_price<={$maxPrice}");
+        }
+        if($keyWord){
+            $query->andWhere("name like '%{$keyWord}%' or sn like '%{$keyWord}%'");
+        }
+        //状态
+        if($status==='0' or $status==='1'){
+            $query->andWhere(["status"=>$status]);
+        }
+        $pages=new Pagination([
+           'totalCount' => $query->count(),
+           'pageSize' => 1
+        ]);
+        $models=$query->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('index', ['models' => $models,'pages'=>$pages]);
     }
     
     //添加
@@ -43,12 +69,33 @@ class GoodsController extends \yii\web\Controller
             $model->load($request->post());
             if($model->validate()){
                 //var_dump($model);exit;
+               //判定货号sn是否存在
+                if(empty($model->sn)){
+                    //自动生成货号
+                    $timeStart=strtotime(date('Ymd'));
+                    //获取今天创建的所有商品数量
+                    $count=Goods::find()->where("inputtime>={$timeStart}")->count();
+                    $count=$count+1;
+                    $count=substr('000'.$count,-4);
+                    $model->sn=date("Ymd").$count;
+                }
                 //设置录入时间
                 $model->inputtime=time();
                 if ($model->save()) {
+                    //内容保存
                     $goodsIntro->load($request->post());
                     $goodsIntro->goods_id=$model->id;
                     $goodsIntro->save();
+                    //保存多图
+                    foreach ($model->imgFile as $img){
+                        //new 一个多图对象 在这里 一起地方会被重复赋值
+                        $goodsGallery=new GoodsGallery();
+                        //赋值
+                        $goodsGallery->goods_id=$model->id;
+                        $goodsGallery->path=$img;
+                        //保存图片
+                        $goodsGallery->save();
+                    }
                     \Yii::$app->session->setFlash('info',"数据提交成功");
                     return $this->redirect(["index"]);
                 }
@@ -64,7 +111,6 @@ class GoodsController extends \yii\web\Controller
     }
 
     //编辑
-    //添加
     public function actionEdit($id)
     {
         $model=Goods::findOne($id);
@@ -79,19 +125,46 @@ class GoodsController extends \yii\web\Controller
         //转化为键值对
         $brsArray=ArrayHelper::map($brs,'id','name');
         //商品内容
-        $goodsIntro=GoodsIntro::find()->where(["goods_id"=>$id])->one();
-
+        $goodsIntro=GoodsIntro::findOne(['goods_id'=>$id]);
+        //查询当前商品对应的所有图片
+        $goodsImgs=GoodsGallery::find()->where(['goods_id'=>$id])->asArray()->all();
+        //返回一维数组回去
+        $model->imgFile=array_column($goodsImgs,'path');
         $request=new Request();
         if($request->isPost){
             $model->load($request->post());
             if($model->validate()){
                 //var_dump($model);exit;
+                //判定货号sn是否存在
+                if(empty($model->sn)){
+                    //自动生成货号
+                    $timeStart=strtotime(date('Ymd'));
+                    //获取今天创建的所有商品数量
+                    $count=Goods::find()->where("inputtime>={$timeStart}")->count();
+                    $count=$count+1;
+                    $count=substr('000'.$count,-4);
+                    $model->sn=date("Ymd").$count;
+                }
                 //设置录入时间
                 $model->inputtime=time();
                 if ($model->save()) {
+                    //内容保存
                     $goodsIntro->load($request->post());
                     $goodsIntro->goods_id=$model->id;
                     $goodsIntro->save();
+                    //清除以前的图片
+                   GoodsGallery::deleteAll(['goods_id'=>$id]);
+                    //保存多图
+                    foreach ($model->imgFile as $img){
+                        //new 一个多图对象 在这里 一起地方会被重复赋值
+                        $goodsGallery=new GoodsGallery();
+
+                        //赋值
+                        $goodsGallery->goods_id=$model->id;
+                        $goodsGallery->path=$img;
+                        //保存图片
+                        $goodsGallery->save();
+                    }
                     \Yii::$app->session->setFlash('info',"数据提交成功");
                     return $this->redirect(["index"]);
                 }

@@ -10,10 +10,14 @@ use yii\web\UploadedFile;
 
 class GoodsGalleryController extends \yii\web\Controller
 {
-    public function actionIndex()
+    public function actionIndex($id)
     {
-        $model=GoodsGallery::find()->all();
-        return $this->render('index',compact('model'));
+        $models=GoodsGallery::find()->where(["goods_id"=>$id])->asArray()->all();
+      /*  //path组装为一维数组
+        $path=array_column($model,'path');
+        $model->path=$path;*/
+        //var_dump($model);exit;
+        return $this->render('index', ['models' => $models]);
     }
 
     //添加多图

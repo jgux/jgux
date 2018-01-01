@@ -22,15 +22,16 @@ use Yii;
  */
 class Goods extends \yii\db\ActiveRecord
 {
-    //public $imgFile;
+    public $imgFile;//用来存储多图
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['goods_category_id', 'brand_id', 'stock', 'status', 'sort','name','sn','market_price','shop_price'], 'required'],
-            [['logo'],'safe'],
+            [['goods_category_id', 'brand_id', 'stock', 'status', 'sort','name','market_price','shop_price'], 'required'],
+            [['logo','imgFile'],'safe'],
+            [['sn'],'unique']
         ];
     }
 
@@ -42,7 +43,7 @@ class Goods extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => '名称',
-            'sn新字段' => '货号',
+            'sn' => '货号|不写会自动生成',
             'logo' => '商品LOGO',
             'goods_category_id' => '商品分类',
             'brand_id' => '品牌',
@@ -52,6 +53,7 @@ class Goods extends \yii\db\ActiveRecord
             'status' => '1正常0回收站',
             'sort' => '排序',
             'inputtime' => '录入时间',
+            'imgfile'=>'多图上传',
         ];
     }
 
