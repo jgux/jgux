@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\Brand;
 use backend\models\Category;
 use backend\models\Goods;
@@ -15,6 +16,16 @@ use yii\web\UploadedFile;
 use flyok666\qiniu\Qiniu;
 class GoodsController extends \yii\web\Controller
 {
+    //权限过滤器
+    public function behaviors()
+    {
+       return [
+         'rbac'=>[
+             'class'=>\backend\filters\RbacFilter::className(),
+         ]
+       ];
+    }
+
     //首页
     public function actionIndex()
     {

@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
@@ -21,15 +23,32 @@ use yii\web\IdentityInterface;
  */
 class Admin extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    //场景验证
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();//本行必填，不写的话就会报如上错误
+        $scenarios['add'] = ['password','username','roles'];
+        return $scenarios;
+    }
+
     //声明一个变量来临时装一下所有的组
     public $roles=[];
     public $role=[];
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    //注入时间
+    public function behaviors()
     {
-        return 'admin';
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                   //ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -38,10 +57,11 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username','password'], 'required'],
+            [['username'], 'required'],
+            [['password'],'safe'],
             [['salt','email','token','token_create_time','roles','role'],'safe'],
-            [['username','email'],'unique'],
-            [['email'],'email'],
+            [['username'],'unique'],
+            [['password'],'required','on'=>'add'],//password场景应用
         ];
     }
 
@@ -59,7 +79,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
             'email' => '邮箱',
             'token' => '自动登录',
             'token_create_time' => '令牌创建时间',
-            'add_time' => '注册时间',
+            'create_at' => '注册时间',
             'last_login_time' => '最后登录时间',
             'last_login_ip' => '登录Ip',
         ];

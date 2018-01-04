@@ -23,7 +23,8 @@
         "flyok666/yii2-qiniu": "^1.0",
         "creocoder/yii2-nested-sets": "^0.9.0",
         "liyuze/yii2-ztree": "*",
-        "dmstr/yii2-adminlte-asset": "^2.6"
+        "dmstr/yii2-adminlte-asset": "^2.6",
+        "mdmsoft/yii2-admin": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

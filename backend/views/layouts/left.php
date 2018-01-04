@@ -12,10 +12,10 @@
                      echo "<p>";
                       echo "请登录";
                      echo "</p>";
-                     echo  "<a href='#'><i class='fa fa-circle text-danger'></i> Online</a>";
+                     echo  "<a href='#'><i class='fa fa-circle text-danger'></i> Offline</a>";
                   }else{
                      echo "<p>";
-                    echo Yii::$app->user->identity->username;
+                    echo "欢迎您".Yii::$app->user->identity->username;
                      echo "</p>";
                   echo  "<a href='#'><i class='fa fa-circle text-success'></i> Online</a>";
                   } ?>
@@ -35,64 +35,41 @@
             </div>
         </form>-->
         <!-- /.search form -->
+        <?php
+            $newMenus = [];
+            $models=\backend\models\Left::find()->where(["parent_id" => 0])->all();
+            //循环得到一级分类
+             foreach ($models as $model){
+                 //分别赋值
+                 $newMenu = [
+                   'label'=>$model->name,
+                   'url'=>'#',
+                 ];
+                 //第二次循环得到二级分类
+                 foreach (\backend\models\Left::find()->where(["parent_id"=>$model->id])->all() as $v){
+                    //给二级分类赋值
+                     $newMenu['items'][]=[
+                         'label' => $v->name,
+                         'url' => [$v->route],
+                     ];
 
-        <?= dmstr\widgets\Menu::widget(
-            [
-                'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
-                'items' => [
-                    ['label' => '后台管理', 'options' => ['class' => 'header']],
-                    ['label' => '品牌', 'icon' => 'fa fa-handshake-o', 'url' => ['/brand/index'],],
-                    ['label' => '添加用户', 'icon' => 'fighter-jet', 'url' => ['/admin/add'],],
-                    /*[
-                        'label' => '管理员',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => '登录', 'icon' => 'hand-pointer-o', 'url' => ['/admin/login'],],
-                            ['label' => '退出', 'icon' => 'fighter-jet', 'url' => ['/admin/logout'],],
-                        ],
-                    ],*/
-                    [
-                        'label' => '权限管理',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => '权限列表', 'icon' => 'hand-pointer-o', 'url' => ['/auth-assignment/index'],],
-                            ['label' => '添加权限', 'icon' => 'fighter-jet', 'url' => ['/auth-assignment/add'],],
-                        ],
-                    ],
-                    [
-                        'label' => '组管理',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => '组列表', 'icon' => 'hand-pointer-o', 'url' => ['/auth-item-child/index'],],
-                            ['label' => '添加组', 'icon' => 'fighter-jet', 'url' => ['/auth-item-child/add'],],
-                        ],
-                    ],
-                    [
-                        'label' => '商品管理',
-                        'icon' => 'share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => '商品列表', 'icon' => 'hand-pointer-o', 'url' => ['/goods/index'],],
-                            ['label' => '商品分类', 'icon' => 'fighter-jet', 'url' => ['/category/index'],],
-                        ],
-                    ],
-                    //文章
-                    [
-                        'label' => '文章整理',
-                        'icon' => 'suitcase',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => '文章', 'icon' => 'taxi', 'url' => ['/article/index'],],
-                            ['label' => '新闻', 'icon' => 'shopping-basket', 'url' => ['/article-category/index'],],
-                        ],
-                    ],
-                    //文章 end
-                ],
-            ]
-        ) ?>
+                 }
+
+                 //把一级分类追加到数组中
+                 $newMenus[]=$newMenu;
+
+            }
+
+        ?>
+
+<?= dmstr\widgets\Menu::widget(
+    [
+        'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
+        'items' => $newMenus,
+    ]
+
+) ?>
+
 
     </section>
 
