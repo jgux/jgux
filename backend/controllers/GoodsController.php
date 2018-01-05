@@ -17,14 +17,14 @@ use flyok666\qiniu\Qiniu;
 class GoodsController extends \yii\web\Controller
 {
     //权限过滤器
-    public function behaviors()
+    /*public function behaviors()
     {
        return [
          'rbac'=>[
              'class'=>\backend\filters\RbacFilter::className(),
          ]
        ];
-    }
+    }*/
 
     //首页
     public function actionIndex()
