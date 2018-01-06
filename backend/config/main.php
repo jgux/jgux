@@ -18,7 +18,7 @@ return [
     'modules' => [
         'admin1' => [
             'class' => 'mdm\admin\Module',
-            'layout' => 'left-menu',//'right-menu' and 'top-menu'
+            //'layout' => 'left-menu',//'right-menu' and 'top-menu'
         ]
     ],
     'components' => [
