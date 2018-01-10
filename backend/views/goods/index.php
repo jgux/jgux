@@ -3,36 +3,32 @@
 use yii\widgets\LinkPager;
 ?>
 <div class="row">
-    <div class="col-xs-2 col-sm-2 col-md-2">
+    <div class="pull-left">
         <a class="btn btn-info" href="<?=\yii\helpers\Url::to(['add'])?>">添加</a>
     </div>
-    <div class="col-xs-10 col-sm-10 col-md-10">
+    <div class="pull-right">
         <!--<select>
             <option>请选择</option>
-            <option>上架</option>
+            <option>上架</option>y
             <option>下架</option>
         </select>-->
         <form class="form-inline">
-            <div class="col-xs-4 col-sm-4 col-md-4">
             <select class="form-control" name="status">
                 <option>选择状态</option>
                 <option value="1" <?= Yii::$app->request->get("status")==='1'?"selected":'' ?>>上架</option>
                 <option value="0" <?= Yii::$app->request->get("status")==='0'?"selected":'' ?>>下架</option>
             </select>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2">
+            <div class="form-group">
                 <input type="text" class="form-control" size="4" name="minPrice"  placeholder="最低价" value="<?php Yii::$app->request->get('minPrice') ?>">
             </div>
-
-            <div class="col-xs-2 col-sm-2 col-md-2">
+            -
+            <div class="form-group">
                 <input type="text" class="form-control" size="4" name="maxPrice"  placeholder="最高价" value="<?php Yii::$app->request->get('maxPrice') ?>">
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2">
+            <div class="form-group">
                 <input type="text" class="form-control" name="keyWord"   placeholder="请输入名称|货号" value="<?php Yii::$app->request->get('keyWord') ?>">
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2">
             <button type="submit" class="btn btn-default">搜索</button>
-            </div>
         </form>
     </div>
 </div>

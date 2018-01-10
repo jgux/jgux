@@ -7,8 +7,9 @@ $params = array_merge(
 );
 
 return [
+    'layout'=>false,
     'language' => 'zh-CN',
-    'defaultRoute'=>'goods/index',
+    //'defaultRoute'=>'goods/index',
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -18,8 +19,8 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-//            'identityClass' => 'common\models\User',
-            'identityClass' => \frontend\models\Admin::className(),
+            'identityClass' => 'common\models\User',
+            //'identityClass' => \frontend\models\Admin::className(),//认证
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
