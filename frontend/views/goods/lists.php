@@ -36,7 +36,11 @@ include_once Yii::getAlias("@app/views/common/header.php");?>
 <div class="list w1210 bc mt10">
     <!-- 面包屑导航 start -->
     <div class="breadcrumb">
-        <h2>当前位置：<a href="">首页</a> > <a href="">电脑、办公</a></h2>
+        <h2>当前位置：<a href="">首页</a> > <a href=""><?php
+                $id=$_GET['id'];
+                echo \backend\models\Category::findOne($id)->name;
+
+                ?></a></h2>
     </div>
     <!-- 面包屑导航 end -->
 
@@ -298,16 +302,14 @@ include_once Yii::getAlias("@app/views/common/header.php");?>
         <!-- 商品列表 start-->
         <div class="goodslist mt10">
             <ul>
-                <?php
-                $id=$_GET["id"];
-                foreach (\backend\models\Goods::find()->all() as $k=>$v): ?>
+                <?php foreach ($goods as $k=>$v): ?>
 
                 <li>
                     <dl>
-                        <dt><a href="<?=\yii\helpers\Url::to(['goods/goods','id'=>$v->id]) ?>"><img src="<?=$v->logo?>" alt="" /></a></dt>
-                        <dd><a href="<?=\yii\helpers\Url::to(['goods/goods','id'=>$v->id]) ?>"><?=$v->name?></a></dt>
-                        <dd><strong><?=$v->shop_price?></strong></dt>
-                        <dd><a href="<?=\yii\helpers\Url::to(['goods/goods','id'=>$v->id]) ?>"><em>已有10人评价</em></a></dt>
+                        <dt><a href="<?=\yii\helpers\Url::to(['goods/goods','id'=>$v['id']]) ?>"><img src="<?=$v['logo']?>" alt="" /></a></dt>
+                        <dd><a href="<?=\yii\helpers\Url::to(['goods/goods','id'=>$v['id']]) ?>"><?=$v['name']?></a></dt>
+                        <dd><strong><?=$v['shop_price']?></strong></dt>
+                        <dd><a href="<?=\yii\helpers\Url::to(['goods/goods','id'=>$v['id']]) ?>"><em>已有10人评价</em></a></dt>
                     </dl>
                 </li>
 

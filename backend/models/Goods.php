@@ -57,5 +57,10 @@ class Goods extends \yii\db\ActiveRecord
         ];
     }
 
+    //和category表示1对1关系
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(),["id"=>"goods_category_id"]);
+    }
 
 }

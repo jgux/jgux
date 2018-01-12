@@ -106,7 +106,7 @@ class UserController extends \yii\web\Controller
 
     }
 
-
+    //登录
     public function actionLogin()
     {
         $request=\Yii::$app->request;
@@ -131,6 +131,14 @@ class UserController extends \yii\web\Controller
         }
 
         return $this->render("login");
+    }
+    
+    //注销
+    public function actionLogout()
+    {
+        if (\Yii::$app->user->logout()) {
+            return $this->redirect(['user/login']);
+        }
     }
 
 }

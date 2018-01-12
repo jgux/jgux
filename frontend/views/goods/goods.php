@@ -186,7 +186,7 @@ include_once Yii::getAlias("@app/views/common/header.php");?>
                         foreach ($imgs as $img):
                         ?>
                             <li class="cur">
-                                <a class="" href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=$img->path?>',largeimage: '<?=$img->path?>'}"><img src="<?=$img->path?>"></a>
+                                <a class="" href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=$img->path?>?imageView2/1/w/350/h/350',largeimage: '<?=$img->path?>?imageView2/1/w/800/h/800'}"><img src="<?=$img->path?>?imageView2/1/w/50/h/50"></a>
                             </li>
 
                         <?php endforeach; ?>
@@ -202,11 +202,12 @@ include_once Yii::getAlias("@app/views/common/header.php");?>
                 <ul>
                     <li><span>商品编号： </span><?=$goods->sn;?></li>
                     <li class="market_price"><span>定价：</span><em> </span><?=$goods->market_price;?></em></li>
-                    <li class="shop_price"><span>本店价：</span> <strong> </span><?=$goods->shop_price;?></strong> <a href="">(降价通知)</a></li>
+                    <li class="shop_prictyhe"><span>本店价：</span> <strong> </span><?=$goods->shop_price;?></strong> <a href="">(降价通知)</a></li>
                     <li><span>上架时间：</span> </span><?=date('Y-m-d',$goods->inputtime)?></li>
                     <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
-                <form action="" method="post" class="choose">
+                <form action="<?=\yii\helpers\Url::to(["goods/add-cart"])?>" method="get" class="choose">
+                    <input type="hidden" name="id" value="<?=$goods->id ?>" />
                     <ul>
 
                         <li>

@@ -24,7 +24,7 @@ class AddressController extends \yii\web\Controller
             $address->phone=$model['phone'];
             $address->user_id=\Yii::$app->user->identity->id;
             if($address->save()){
-                return $this->refresh();
+                  return $this->refresh();
             }
         }
         return $this->render('index',compact("model"));

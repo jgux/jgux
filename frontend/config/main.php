@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+    'defaultRoute'=>'index/index',
     'layout'=>false,
     'language' => 'zh-CN',
     //'defaultRoute'=>'goods/index',
