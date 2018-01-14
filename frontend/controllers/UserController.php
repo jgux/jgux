@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\components\ShopCart;
 use frontend\models\User;
 use Mrgoon\AliSms\AliSms;
 use yii\helpers\Json;
@@ -107,7 +108,7 @@ class UserController extends \yii\web\Controller
     }
 
     //登录
-    public function actionLogin()
+    public function actionLogin($back='index/index')
     {
         $request=\Yii::$app->request;
         if ($request->isPost){
@@ -121,7 +122,14 @@ class UserController extends \yii\web\Controller
                 if($user && \Yii::$app->security->validatePassword($model->password,$user->password_hash)){
                 //3.成功登录
                     \Yii::$app->user->login($user,$model->rememberMe?3600*24*7:0);
-                    return $this->redirect(['index/index']);
+                //同步cookie里的数据到数据库
+                $shopCart=new ShopCart();
+                $shopCart->synDb();//同步cookie到数据库
+                $shopCart->flush()->save();
+
+
+
+                    return $this->redirect([$back]);
                 }
                 echo "密码错误";exit;
             }

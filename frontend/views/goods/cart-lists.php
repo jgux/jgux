@@ -79,7 +79,7 @@ include_once Yii::getAlias("@app/views/common/header.php");?>
     </table>
     <div class="cart_btn w990 bc mt10">
         <a href="" class="continue">继续购物</a>
-        <a href="<?= Yii::$app->user->isGuest?\yii\helpers\Url::to(["user/login"]):\yii\helpers\Url::to(["goods/cart-address"]);
+        <a href="<?= Yii::$app->user->isGuest?\yii\helpers\Url::to(["user/login",'back'=>'order/index']):\yii\helpers\Url::to(["order/index"]);
         ?>" class="checkout">结 算</a>
     </div>
 </div>

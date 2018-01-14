@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use backend\models\Category;
 use backend\models\Goods;
+use frontend\components\ShopCart;
 use frontend\models\Cart;
 use yii\web\Cookie;
 
@@ -36,24 +37,8 @@ class GoodsController extends \yii\web\Controller
         //未登录
         if (\Yii::$app->user->isGuest) {
             //2.1 取出cookie
-            $cartOld=\Yii::$app->request->cookies->getValue('cart',[]);
-            //2.2 判断$cartOld 里有没有当前商品Id
-            if (array_key_exists($id,$cartOld)) {
-                //存在 修改操作
-                $cartOld[$id]=$cartOld[$id]+$amount;
-            }else{
-                //不存在商品 执行增操作
-                $cartOld[$id]=$amount;
-            }
-            //1.得到cookie对象
-            $cookies = \Yii::$app->response->cookies;
-            //$cookies->expire=time()+3600;
-            //2 发送相应 添加一个新的cookie
-            $cookies->add(new \yii\web\Cookie([
-                'name' => 'cart',
-                'value' => $cartOld,
-                'expire'=>time()+3600*24*7,
-            ]));
+          $shopCart=new ShopCart();
+          $shopCart->add($id,$amount)->save();
             return $this->redirect('cart-lists');
 
         }else{
@@ -134,17 +119,8 @@ class GoodsController extends \yii\web\Controller
         //判定游客
         if (\Yii::$app->user->isGuest) {
             //1.取出购物车数据库
-            $cart=\Yii::$app->request->cookies->getValue('cart',[]);
-            $cart[$id]=$amount;
-            //2.得到cookie对象
-            $setCookie=\Yii::$app->response->cookies;
-            //3生成一个新的cookie对象
-            $cookie=new Cookie([
-               'name'=>'cart',
-               'value' => $cart,
-                'expire' => time() +3600*24*7,
-            ]);
-            $setCookie->add($cookie);
+            $shopCart=new ShopCart();
+            $shopCart->update($id,$amount)->save();
             return 1;
         }else{
             //登录
@@ -164,17 +140,8 @@ class GoodsController extends \yii\web\Controller
         if(\Yii::$app->user->isGuest){
 
             //1.取出购物数据
-            $cart=\Yii::$app->request->cookies->getValue('cart',[]);
-            //1.1 删除数组中的id unset|array_splice() 前一个索引不变|后一个变
-            unset($cart[$id]);
-
-            //2.设置新的cookie对象
-            $cookie=\Yii::$app->response->cookies;
-            // 在要发送的响应中添加一个新的 cookie
-            $cookie->add(new \yii\web\Cookie([
-                'name' => 'cart',
-                'value' =>$cart,
-            ]));
+            $shopCart=new ShopCart();
+            $shopCart->del($id)->save();
             //删除对象
             //unset($cookie[$id]);
             //返回1 确认删除数据成功
@@ -190,26 +157,6 @@ class GoodsController extends \yii\web\Controller
         }
 
     }
-
-    public function actionCartAddress()
-    {
-        $user_id=\Yii::$app->user->identity->id;
-        $carts=Cart::find()->where(['user_id'=>$user_id])->asArray()->all();
-        //var_dump($carts);
-        //1.2 取出所有的Id
-        $goodIds=array_column($carts,"goods_id");
-        $goodNum=array_column($carts,"amount");
-        //var_dump($goodNum);exit();
-        //1.3获取所有的商品
-        $goods=Goods::find()->where(['in',"id",$goodIds])->asArray()->all();
-        foreach ($goods as $k=>$good){
-            $goods[$k]['num']=$goodNum[$k];
-        }
-        //var_dump($goods);exit;
-        return $this->render('cart-address',compact('goods'));
-
-    }
-
 
     //测试cookie
     public function actionTest()
