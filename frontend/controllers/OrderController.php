@@ -141,9 +141,9 @@ class OrderController extends \yii\web\Controller
             // ...
         ];
 
-        $easyOrder =new \EasyWeChat\Payment\Order($attributes);
+        $order =new \EasyWeChat\Payment\Order($attributes);
 
-        $result = $payment->prepare($easyOrder);
+        $result = $payment->prepare($order);
         //var_dump($result);exit;
         if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS'){
             //$prepayId = $result->prepay_id;
@@ -169,15 +169,15 @@ class OrderController extends \yii\web\Controller
         $app = new Application(\Yii::$app->params['easyWechat']);
         $response = $app->payment->handleNotify(function($notify, $successful){
             // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
-            $notifyOrder = Order::findOne(["trade_no"=>$notify->out_trade_no]);
+            $order = Order::findOne(["trade_no"=>$notify->out_trade_no]);
 
-            if (!$notifyOrder) { // 如果订单不存在
+            if (!$order) { // 如果订单不存在
                 return 'Order not exist.'; // 告诉微信，我已经处理完了，订单没找到，别再通知我了
             }
 
             // 如果订单存在
             // 检查订单是否已经更新过支付状态
-            if ($notifyOrder->status!=1) { // 假设订单字段“支付时间”不为空代表已经支付
+            if ($order->status!=1) { // 假设订单字段“支付时间”不为空代表已经支付
                 return true; // 已经支付成功了就不再更新了
             }
 
@@ -185,9 +185,9 @@ class OrderController extends \yii\web\Controller
             if ($successful) {
                 // 不是已经支付状态则修改为已经支付状态
                 //$order->paid_at = time(); // 更新支付时间为当前时间
-                $notifyOrder->status =2;
+                $order->status =2;
             }
-            $notifyOrder->save(); // 保存订单
+            $order->save(); // 保存订单
 
             return true; // 返回处理完成
         });
