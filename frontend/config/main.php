@@ -8,7 +8,7 @@ $params = array_merge(
 );
 
 return [
-    'header'=>'Header always set Access-Control-Allow-Origin "*"',
+
     'defaultRoute'=>'index/index',
     'layout'=>false,
     'language' => 'zh-CN',
