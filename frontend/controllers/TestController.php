@@ -15,6 +15,7 @@ class TestController extends Controller
 {
     public function actionTest()
     {
+        echo "header('Access-Control-Allow-Origin:*')";
         echo 11111;
     }
 }
