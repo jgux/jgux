@@ -231,6 +231,9 @@ class GoodsController extends \yii\web\Controller
                 'class' => 'kucha\ueditor\UEditorAction',
             ]
         ];
+
+
+
     }
 
 

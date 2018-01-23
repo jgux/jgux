@@ -80,6 +80,23 @@ class UserController extends \yii\web\Controller
     //手机验证
     public function actionSms($mobile)
     {
+
+        /*
+         * 1. 每个手机号每隔60秒才再再次发送
+         * 1.1 当前时间time()-send_time<60,则提示不能发送，否则能发送，更新send_time
+         * 2. 每个手机号每天只能3条
+         * 2.1 判断当天有没有发送过，执行添加操作，如果当天已经有发送，判断times>=3,则不能发送;否则给times+1
+         *
+         * 入库
+         *   tel  code    times    date      send_time
+         *   188  1111      1   20180115     22222222
+         *
+         * 3.由于网络不好，导致短信前后不一致的问题
+         * 3.1 当前时间time()-send_time<5*60  1111  1111   1111
+         *
+         *1=》1111  2=1111  3=1111          序号
+         *
+         * */
         //1生成验证码 规则6位
         $code=rand(1000,9999);
 

@@ -86,6 +86,7 @@
 
     <div style="clear:both;"></div>
 
+    <?php ob_start() //开启缓存?>
     <!-- 导航条部分 start -->
     <div class="nav w1210 bc mt10">
         <!--  商品分类部分 start-->
@@ -97,23 +98,23 @@
 
             <div class="cat_bd <?=\Yii::$app->controller->id."/".\Yii::$app->controller->action->id=='index/index'?"":"none"?>">
                 <?php foreach (\backend\models\Category::find()->where(["parent_id"=>0])->all() as $k1=>$v1): ?>
-                <div class="cat <?=$k1==0?"iteml":""?>">
-                    <h3><a href="<?=\yii\helpers\Url::to(['goods/lists','id'=>$v1->id])?>"><?=$v1->name?></a> <b></b></h3>
-                    <div class="cat_detail">
+                    <div class="cat <?=$k1==0?"iteml":""?>">
+                        <h3><a href="<?=\yii\helpers\Url::to(['goods/lists','id'=>$v1->id])?>"><?=$v1->name?></a> <b></b></h3>
+                        <div class="cat_detail">
 
-                    <?php foreach (\backend\models\Category::find()->where(["parent_id"=>$v1->id])->all() as $k2=>$v2): ?>
-                        <dl class="<?=$k2==0?"dl_1st":""?>">
-                            <dt><a href="<?=\yii\helpers\Url::to(['goods/lists','id'=>$v2->id])?>"><?=$v2->name?></a></dt>
-                            <dd>
-                                <?php foreach (\backend\models\Category::find()->where(["parent_id"=>$v2->id])->all() as $k3=>$v3): ?>
+                            <?php foreach (\backend\models\Category::find()->where(["parent_id"=>$v1->id])->all() as $k2=>$v2): ?>
+                                <dl class="<?=$k2==0?"dl_1st":""?>">
+                                    <dt><a href="<?=\yii\helpers\Url::to(['goods/lists','id'=>$v2->id])?>"><?=$v2->name?></a></dt>
+                                    <dd>
+                                        <?php foreach (\backend\models\Category::find()->where(["parent_id"=>$v2->id])->all() as $k3=>$v3): ?>
 
-                                <a href="<?=\yii\helpers\Url::to(['goods/lists','id'=>$v3->id])?>"><?=$v3->name?></a>
-                                <?php endforeach; ?>
-                            </dd>
-                        </dl>
-                    <?php endforeach; ?>
+                                            <a href="<?=\yii\helpers\Url::to(['goods/lists','id'=>$v3->id])?>"><?=$v3->name?></a>
+                                        <?php endforeach; ?>
+                                    </dd>
+                                </dl>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
 
 
@@ -136,4 +137,26 @@
         </div>
     </div>
     <!-- 导航条部分 end -->
+    <?php
+        $html=ob_get_clean() ;//得到缓存 ob_get_clean()与ob_get_contents()的区别
+        //存入缓存
+    //首页和其他页面不一样 首页最开始要展示出来 其他的不会 所以要分开缓存
+    $cacheName=\Yii::$app->controller->id."/".\Yii::$app->controller->action->id=='index/index'?"index":"list";
+
+    //Yii::$app->cache->set('category',$html);//使用yii自带的文件缓存 存入缓存
+        //判定有没有文件缓存
+    if (Yii::$app->cache->get($cacheName)) {
+        //输出文件缓存
+        echo Yii::$app->cache->get($cacheName);
+    }else{
+        //第一次没有缓存 输出原html
+        //输出ob
+        echo $html;
+        //如果没有缓存 开始缓存
+    Yii::$app->cache->set($cacheName,$html,3600*5);
+    }
+
+
+    ?>
+
 </div>

@@ -27,7 +27,9 @@
         "mdmsoft/yii2-admin": "~2.0",
         "mrgoon/aliyun-sms": "dev-master",
         "overtrue/wechat": "~3.1",
-        "2amigos/yii2-qrcode-helper": "~1.0"
+        "2amigos/yii2-qrcode-helper": "~1.0",
+        "yiisoft/yii2-redis": "^2.0",
+        "80h4ck/tp5-auth": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

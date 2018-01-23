@@ -195,6 +195,29 @@ class OrderController extends \yii\web\Controller
         return $response;
     }
 
+    //清除超时未支付的订单
+    public function actionClear()
+    {
+        //1 找出 超时 未支付 time()-150*60>创建时间 就是超时单了
+        //创建时间<time()-5;
+        $order=Order::find()->where(['status'=>1])->andWhere(['<','create_time',time()-10])->asArray()->all();
+        //2 提取所有要取消的订单的id
+        $orderIds=array_column($order,'id');
+        var_dump($orderIds);
+        //3 修改超时未支付订单的状态-1-0 取消
+        Order::updateAll(['status'=>0],['in','id',$orderIds]);
+        //4 根据id找出所有的order_detail里的商品 还原库存
+        foreach ($orderIds as $orderId){//订单表和订单详情表示一对多的关系
+            //根据id找到对应的商品
+            $orderGoods=OrderDetail::find()->where(['order_id'=>$orderId])->all();
+            //还原库存
+            foreach ($orderGoods as $orderGood){
+                Goods::updateAllCounters(['stock'=>$orderGood->amount],['id'=>$orderGood->goods_id]);
+            }
+        }
+
+    }
+
 
     
 }

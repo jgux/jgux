@@ -28,7 +28,12 @@ return [
         'session' => [
             // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
-        ],
+        ], //把session存入文件中
+        /*'session' => [
+              'class' => 'yii\redis\Session',
+              // 'redis' => 'redis' // id of the connection application component
+         ],*/ //把sessioon存入redis中
+
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
