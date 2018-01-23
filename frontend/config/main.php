@@ -1,4 +1,5 @@
 <?php
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -7,6 +8,7 @@ $params = array_merge(
 );
 
 return [
+    'header'=>'Header always set Access-Control-Allow-Origin "*"',
     'defaultRoute'=>'index/index',
     'layout'=>false,
     'language' => 'zh-CN',

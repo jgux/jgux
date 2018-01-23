@@ -7,15 +7,21 @@
  */
 
 namespace frontend\controllers;
-
+use yii\filters\Cors;
+use yii\helpers\ArrayHelper;
 
 use yii\web\Controller;
 
 class TestController extends Controller
 {
+    public function behaviors()
+    {
+        return ArrayHelper::merge(
+            [['class' => Cors::className(),],], parent::behaviors());
+    }
+
     public function actionTest()
     {
-        echo "header('Access-Control-Allow-Origin:*';)";
         echo 11111;
     }
 }
