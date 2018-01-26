@@ -22,6 +22,6 @@ class TestController extends Controller
 
     public function actionTest()
     {
-        echo 11111;
+        echo 222222;
     }
 }
